@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>For admin</title>
+</head>
+<body>
+<h2>Welcome to spring boot security page!</h2>
+<div>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th>Role</th>
+        </tr>
+
+        <tr th:each="user : ${userSet}">
+            <td th:text="${user.getName()}">Name</td>
+            <td th:text="${user.getSurname()}">Surname</td>
+            <td th:text="${user.getAge()}">Age</td>
+            <td th:text="${user.getEmail()}">Email</td>
+            <td th:text="${user.getRoles()}">Role</td>
+
+            <td>
+                <form th:action= "@{/admin/{id}/edit(id=${user.getId()})}" th:object="${user}">
+                <button style="background:#bfe3ef" type="submit">Update</button>
+                </form>
+            </td>
+
+            <td>
+                <form th:action="@{/admin/{id}/delete(id=${user.getId()})}" th:object="${user}">
+                    <button style="background:#f3bfae" type="submit">Delete</button>
+                </form>
+            </td>
+
+        </tr>
+    </table>
+    </br>
+    </br>
+    </hr>
+
+    <form th:method="GET" th:action="@{/admin/new}">
+        <button type="submit">Create new user</button>
+    </form>
+</div>
+
+<br>
+<div th:fragment="exit_button">
+    <form action="/logout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+</div>
+</body>
+</html>

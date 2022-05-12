@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update user</title>
+</head>
+<body>
+<h2>Update user</h2>
+<div>
+
+    <form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
+                <label th:for="name">Name</label>
+                <input type="text" name="name" th:id="name" th:value="${user.getName()}">
+            </p>
+            <p>
+                <label th:for="surname">Surname</label>
+                <input type="text" name="surname" th:id="surname" th:value="${user.getSurname()}"><br/>
+            </p>
+            <p>
+                <label th:for="age">Age</label>
+                <input type="number" name="age" th:id="age" th:value="${user.getAge()}"><br/>
+            </p>
+            <p>
+                <label th:for="email">Email</label>
+                <input type="text" name="email" th:id="email" th:value="${user.getEmail()}"><br/>
+            </p>
+            <p>
+                <label th:for="password">Password</label>
+                <input type="password" name="password" th:id="password"><br/>
+            </p>
+        <select size="2" name="role_id" multiple>
+            <option th:each="role : ${roles}"
+                    th:value="${role.id}"
+                    th:text="${role.getRole()}">
+            </option>
+        </select>
+        <br>
+        <input type="submit" value="Update"/>
+    </form>
+    <br>
+    <div th:fragment="exit_button">
+        <form action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+</body>
+</html>
