@@ -7,7 +7,11 @@
 <body>
 <h2>Add user</h2>
 <div>
-<form th:method="POST" th:action="@{/admin}" th:object="${user}">
+<form th:action="@{/logout}" method="post" th:object="${user}">
+    <input type="submit" value="logout">
+</form>
+    <br>
+    <form method="POST" th:action="@{/admin/users/new}" th:object="${user}">
     <fieldset>
         <legend>User data</legend>
     <label for="name">Enter name</label>
@@ -30,19 +34,20 @@
     <input type="password" th:field="*{password}" id="password"/>
         <div style="color:indianred" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
     <br>
-    <select size="2" name="role_id" multiple>
-        <option th:each="role : ${roles}"
-                th:value="${role.id}"
-                th:text="${role.getRole()}">
-        </option>
-    </select>
+        <label>
+            <select size="3" multiple="multiple" name="roles" id="roles">
+                <option disabled>Roles:</option>
+                <option value="ROLE_ADMIN">ADMIN</option>
+                <option selected value="ROLE_USER">USER</option>
+            </select>
+        </label>
 
     </fieldset>
     <p>
         <button style="background:#bfe3ef" type="submit">Save user</button>
 </form>
     <br/>
-    <form action="/logout" method="POST">
+    <form th:action="@{/admin}">
         <button style="background:#f3bfae" type="submit" class="btn btn-outline-danger">Back to user list</button>
     </form>
 </div>

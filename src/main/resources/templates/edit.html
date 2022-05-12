@@ -8,7 +8,10 @@
 <h2>Update user</h2>
 <div>
 
-    <form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
+    <form th:method="PATCH" th:action="@{/admin/users/{id}/edit(id=${user.getId()})}" th:object="${user}">
+        <fieldset>
+            <legend>User data</legend>
+            <p>
                 <label th:for="name">Name</label>
                 <input type="text" name="name" th:id="name" th:value="${user.getName()}">
             </p>
@@ -28,20 +31,23 @@
                 <label th:for="password">Password</label>
                 <input type="password" name="password" th:id="password"><br/>
             </p>
-        <select size="2" name="role_id" multiple>
-            <option th:each="role : ${roles}"
-                    th:value="${role.id}"
-                    th:text="${role.getRole()}">
-            </option>
-        </select>
-        <br>
-        <input type="submit" value="Update"/>
+        <p>
+        <label>
+            <select size="3" multiple="multiple" name="roles" id="roles">
+                <option disabled>Roles:</option>
+                <option value="ROLE_ADMIN">ADMIN</option>
+                <option selected value="ROLE_USER">USER</option>
+            </select>
+        </label>
+        </p>
+        </fieldset>
+        <button style="background: lightgray" type="submit">Изменить данные</button>
     </form>
-    <br>
-    <div th:fragment="exit_button">
-        <form action="/logout" method="POST">
-            <button type="submit">Logout</button>
-        </form>
-    </div>
+
+    <br/>
+    <form th:action="@{/admin/users}">
+        <button style="background: lightgray" type="submit">Назад к списку пользователей</button>
+    </form>
+</div>
 </body>
 </html>

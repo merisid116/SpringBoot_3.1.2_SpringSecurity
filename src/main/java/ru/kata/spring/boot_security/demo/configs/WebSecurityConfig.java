@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() { // сверяет userDetailsService с поступившим юзером
+    protected DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
@@ -45,23 +45,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception { // конфиги в которых указывается доступы пользователей
-        http
+            http
                 .cors().disable()
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/admin").access("hasAnyRole('ADMIN')")
-                .antMatchers("/admin/**").access("hasAnyRole('ADMIN')")
-                .antMatchers("/user").access("hasAnyRole('USER', 'ADMIN')")
-                .antMatchers("/user/**").access("hasAnyRole('USER', 'ADMIN')")
-                .anyRequest()
-                .authenticated()
+                .csrf().disable() //  защита от CSRF-атак
+                .authorizeRequests() //авторизацуем запрос
+                .antMatchers("/login", "/").permitAll()
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated() // все запросы должны быть авторизованы и аутентифицированы
                 .and()
                 .formLogin()
                 .successHandler(successUserHandler)
-                .usernameParameter("email")
-                .passwordParameter("password")
+                .permitAll() // доступно всем
                 .and()
-                .logout()
-                .logoutSuccessUrl("/");
+                .logout().permitAll(); // настройка логаута
     }
 }

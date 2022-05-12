@@ -23,7 +23,12 @@ public class AdminController {
 
     public AdminController() {}
 
-    @GetMapping
+    @GetMapping()
+    public String homeAdmin() {
+        return "redirect:/admin/users";
+    }
+
+    @GetMapping("users")
     public String printUsers(Model model) {
         model.addAttribute("userSet", userService.getAllUsers());
         return "all_users";
@@ -31,23 +36,23 @@ public class AdminController {
 
     // добавить пользователя
 
-    @GetMapping(value = "/new")
+    @GetMapping(value = "users/new")
     public String newUserForm(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("roles", roleService.getAllRoles());
         return "add";
     }
 
-    @PostMapping(value = "users/add")
+    @PostMapping(value = "users/new")
     public String createNewUser(@ModelAttribute("user") User user
             , @RequestParam(value = "roles") String[] roles) {
         user.setRoles(roleService.getSetOfRoles(roles));
         userService.addUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
     // изменение пользователя
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("users/{id}/edit")
     public String editUserForm(Model model, @PathVariable("id") long id) {
         model.addAttribute("roles", roleService.getAllRoles());
         model.addAttribute("user", userService.getUserById(id));
@@ -59,15 +64,15 @@ public class AdminController {
             , @RequestParam(value = "roles") String[] roles) {
         user.setRoles(roleService.getSetOfRoles(roles));
         userService.editUser(user);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
     // удаление пользователя
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("users/{id}/delete")
     public String deleteUserById(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return "redirect:/admin/users";
     }
 
 
